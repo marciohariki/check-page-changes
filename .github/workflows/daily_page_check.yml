@@ -24,4 +24,4 @@ jobs:
           pip install requests  # Install the required libraries, e.g., requests
 
       - name: Run page change detection script
-        run: python page_change_detector.py  # Replace with the actual path to your script
+        run: python main.py  # Replace with the actual path to your script
