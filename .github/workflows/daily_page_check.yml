@@ -25,3 +25,16 @@ jobs:
 
       - name: Run page change detection script
         run: python main.py  # Replace with the actual path to your script
+
+      - name: Send email on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v4
+        with:
+          server_address: smtp.gmail.com  # Replace with your email server
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Treasure CUP page has change"
+          body: "reasure CUP page has change check this link https://www.ccgeventos.com.br/informa-es-do-evento-e-registro/treasure-cup-one-piece-card-game"
+          to: marciohariki@gmail.com  # Replace with recipient's email
+          from: marciohariki@gmail.com  # Replace with sender's email

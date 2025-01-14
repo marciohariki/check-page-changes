@@ -48,7 +48,7 @@ def check_if_page_changed():
     if current_hash != saved_hash:
         print(f"The page has changed since the last check on {datetime.now().strftime('%Y-%m-%d')}.")
         save_snapshot(current_hash)  # Save the new content
-        return True  # Page has changed
+        raise Exception("The page has changed since the last check")
     else:
         print(f"No change detected. The page is the same as yesterday ({datetime.now().strftime('%Y-%m-%d')}).")
         return False  # No change
