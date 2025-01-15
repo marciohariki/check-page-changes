@@ -1,58 +1,30 @@
-import os
-import hashlib
 import requests
-from datetime import datetime
+from bs4 import BeautifulSoup
 
 # URL of the page to monitor
 URL = 'https://www.ccgeventos.com.br/informa-es-do-evento-e-registro/treasure-cup-one-piece-card-game'  # Change this to your desired page
+TARGET_STRING = "Esse evento está esgotado."
 
-# File to store the previous day's page content hash
-SNAPSHOT_FILE = 'page_snapshot.txt'
+# Function to check if the string is present on a webpage
+def check_page_for_string(url, target_string):
+    try:
+        # Send a GET request to the URL
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an exception for HTTP errors
 
-def fetch_page_content(url):
-    """Fetch the content of the web page."""
-    response = requests.get(url)
-    return response.text
+        # Parse the webpage content
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-def save_snapshot(content_hash):
-    """Save the content hash to a file."""
-    with open(SNAPSHOT_FILE, 'w') as file:
-        file.write(content_hash)
+        # Check if the target string is in the page content
+        if target_string in soup.get_text():
+            raise Exception(f'The string "{target_string}" was not found on the page.')
 
-def get_saved_snapshot():
-    """Retrieve the saved snapshot content hash from the file."""
-    if os.path.exists(SNAPSHOT_FILE):
-        with open(SNAPSHOT_FILE, 'r') as file:
-            return file.read()
-    return None
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred while trying to fetch the page: {e}")
+        return False
 
-def get_content_hash(content):
-    """Generate a hash for the content."""
-    return hashlib.md5(content.encode('utf-8')).hexdigest()
 
-def check_if_page_changed():
-    """Check if the page has changed compared to the previous day."""
-    # Fetch current page content
-    current_content = fetch_page_content(URL)
-    current_hash = get_content_hash(current_content)
-
-    # Get the previous day's saved snapshot
-    saved_hash = get_saved_snapshot()
-
-    if saved_hash is None:
-        print("No snapshot found. Saving current page content.")
-        save_snapshot(current_hash)
-        return False  # No change yet, because it's the first time
-
-    # Compare hashes
-    if current_hash != saved_hash:
-        print(f"The page has changed since the last check on {datetime.now().strftime('%Y-%m-%d')}.")
-        save_snapshot(current_hash)  # Save the new content
-        raise Exception("The page has changed since the last check")
-    else:
-        print(f"No change detected. The page is the same as yesterday ({datetime.now().strftime('%Y-%m-%d')}).")
-        return False  # No change
 
 # Main function to check page change
 if __name__ == "__main__":
-    check_if_page_changed()
+    check_page_for_string(URL, TARGET_STRING)
