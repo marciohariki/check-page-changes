@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests  # Install the required libraries, e.g., requests
+          pip install requests beautifulsoup4 # Install the required libraries, e.g., requests, beautifulsoup4
 
       - name: Run page change detection script
         run: python main.py  # Replace with the actual path to your script
