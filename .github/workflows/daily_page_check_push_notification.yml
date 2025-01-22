@@ -1,4 +1,4 @@
-name: Daily Page Change Check
+name: Daily Page Change Check - Push Notification
 
 on:
   schedule:
@@ -26,15 +26,9 @@ jobs:
       - name: Run page change detection script
         run: python main.py  # Replace with the actual path to your script
 
-      - name: Send email on failure
+      - name: Send push notification on failure
         if: failure()
-        uses: dawidd6/action-send-mail@v4
-        with:
-          server_address: smtp.gmail.com  # Replace with your email server
-          server_port: 587
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "Treasure CUP page has change"
-          body: "Treasure CUP page has change check this link https://www.ccgeventos.com.br/informa-es-do-evento-e-registro/treasure-cup-one-piece-card-game"
-          to: marciohariki@gmail.com  # Replace with recipient's email
-          from: marciohariki@gmail.com  # Replace with sender's email
+        uses: techulus/push-github-action@1.0.0
+        env:
+          API_KEY: ${{ secrets.API_KEY_TECHULUS }}
+          MESSAGE: "There is a new ticket on Treasure Cup"

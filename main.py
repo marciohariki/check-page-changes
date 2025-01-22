@@ -17,7 +17,7 @@ def check_page_for_string(url, target_string):
 
         # Check if the target string is in the page content
         if target_string not in soup.get_text():
-            raise Exception(f'The string "{target_string}" was found on the page.')
+            raise Exception(f'The string "{target_string}" was not found on the page.')
 
     except requests.exceptions.RequestException as e:
         print(f"An error occurred while trying to fetch the page: {e}")
