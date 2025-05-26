@@ -2,8 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 
 # URL of the page to monitor
-URL = 'https://www.ccgeventos.com.br/informa-es-do-evento-e-registro/treasure-cup-one-piece-card-game'  # Change this to your desired page
-TARGET_STRING = "Esse evento está esgotado."
+URL = 'https://www.ccgeventos.com.br/informa-es-do-evento-e-registro/one-piece-offline-regionals-2025-agosto'  # Change this to your desired page
+TARGET_STRING = "Esgotado"
 
 # Function to check if the string is present on a webpage
 def check_page_for_string(url, target_string):
